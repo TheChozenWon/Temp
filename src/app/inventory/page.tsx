@@ -111,57 +111,59 @@ export default function InventoryPage() {
   };
   
   return (
-    <div className={sharedStyles.container}>
-      <form onSubmit={handleSubmit}>
-        <h1>Inventory</h1>
-        <ul>
-          {allItems.map((item, index) => (
-            <li key={index}>
-              <h2>{item.food || (index === allItems.length - 1 ? "New Item" : "Unknown Food Item")}</h2>
-              <input
-                type="text"
-                className={sharedStyles.input}
-                placeholder="Food"
-                value={item.food}
-                onChange={(e) => updateItem(index, "food", e.target.value)}
-              />
-              <input
-                type="date"
-                className={sharedStyles.input}
-                placeholder="Expiration Date"
-                value={item.expiration.toString()}
-                onChange={(e) => updateItem(index, "expiration", e.target.value)}
-              />
-              <input
-                type="number"
-                className={sharedStyles.input}
-                placeholder="Cost"
-                value={item.cost}
-                onChange={(e) => updateItem(index, "cost", e.target.value)}
-                min={0}
-              />
-              <input
-                type="text"
-                className={sharedStyles.input}
-                placeholder="Type"
-                value={item.food_type}
-                onChange={(e) => updateItem(index, "food_type", e.target.value)}
-              />
-            </li>
-          ))}
-        </ul>
-        <input
-          type="submit"
-          disabled={allItems.length === 0 || validateItems(allItems) === null}
-          className={`${sharedStyles.input} ${sharedStyles.submit}`}
-          value="Save"
-        />
-        {issue && mode == SuccessMode.ERROR && <p className={sharedStyles.error}>{issue}</p>}
-        {success && mode == SuccessMode.SUCCESS && <p className={sharedStyles.success}>{success}</p>}
-      </form>
-      <p className={styles.memetext}>
-          Web design is my passion!
-      </p>
+    <div className={`${styles.wrapper} ${sharedStyles.cardPage}`}>
+      <div className={sharedStyles.container}>
+        <form onSubmit={handleSubmit}>
+          <h1>Inventory</h1>
+          <ul>
+            {allItems.map((item, index) => (
+              <li key={index}>
+                <h2>{item.food || (index === allItems.length - 1 ? "New Item" : "Unknown Food Item")}</h2>
+                <input
+                  type="text"
+                  className={sharedStyles.input}
+                  placeholder="Food"
+                  value={item.food}
+                  onChange={(e) => updateItem(index, "food", e.target.value)}
+                />
+                <input
+                  type="date"
+                  className={sharedStyles.input}
+                  placeholder="Expiration Date"
+                  value={item.expiration.toString()}
+                  onChange={(e) => updateItem(index, "expiration", e.target.value)}
+                />
+                <input
+                  type="number"
+                  className={sharedStyles.input}
+                  placeholder="Cost"
+                  value={item.cost}
+                  onChange={(e) => updateItem(index, "cost", e.target.value)}
+                  min={0}
+                />
+                <input
+                  type="text"
+                  className={sharedStyles.input}
+                  placeholder="Type"
+                  value={item.food_type}
+                  onChange={(e) => updateItem(index, "food_type", e.target.value)}
+                />
+              </li>
+            ))}
+          </ul>
+          <input
+            type="submit"
+            disabled={allItems.length === 0 || validateItems(allItems) === null}
+            className={`${sharedStyles.input} ${sharedStyles.submit}`}
+            value="Save"
+          />
+          {issue && mode == SuccessMode.ERROR && <p className={sharedStyles.error}>{issue}</p>}
+          {success && mode == SuccessMode.SUCCESS && <p className={sharedStyles.success}>{success}</p>}
+        </form>
+        <p className={styles.memetext}>
+            Web design is my passion!
+        </p>
+      </div>
     </div>
   );
 }

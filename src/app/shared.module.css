@@ -1,5 +1,4 @@
-.body {
-  background: linear-gradient(to bottom right, red, orange, yellow, green, blue, indigo, violet);
+.cardPage {
   display: flex;
   flex-direction: column;
   align-items: center;
