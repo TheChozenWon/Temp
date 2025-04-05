@@ -7,10 +7,20 @@
   font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif;
   font-size: 2.5rem;
   font-weight: bold;
+  color: yellow;
   transform: rotate(-10deg);
-  color: #ff69b4;
 }
 
 .wrapper {
   background: linear-gradient(to bottom right, red, orange, yellow, green, blue, indigo, violet);
+  animation: spinon 1s linear normal;
+}
+
+@keyframes spinon {
+  0% {
+    transform: rotate(0deg) scale(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
