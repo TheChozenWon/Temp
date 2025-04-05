@@ -13,7 +13,7 @@
 
 .wrapper {
   background: linear-gradient(to bottom right, red, orange, yellow, green, blue, indigo, violet);
-  animation: spinon 1s linear normal;
+  animation: spinon .8s linear normal;
 }
 
 @keyframes spinon {
