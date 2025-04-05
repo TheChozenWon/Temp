@@ -1,9 +1,9 @@
 BEGIN TRANSACTION;
 
-CREATE TABLE Food_storage (
+CREATE TABLE FoodStorage (
     food VARCHAR(30) NOT NULL,
-    expiration DATE;
-    cost FLOAT;
+    expiration DATE,
+    cost FLOAT,
     food_type VARCHAR(20)
 );
 
