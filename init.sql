@@ -5,13 +5,13 @@ CREATE TABLE FoodStorage (
     expiration DATE,
     cost FLOAT,
     food_type VARCHAR(20)
+    use_date DATE DEFAULT NULL,
+    is_expired BOOLEAN DEFAULT FALSE
 );
 
-INSERT INTO FoodStorage (food, expiration, cost, food_type) VALUES
-('Apples', '2026-10-01', 1.50, 'Fruit'),
-('Bread', '2026-09-15', 2.00, 'Grain'),
-('Chicken', '2026-10-05', 5.00, 'Meat'),
-('Milk', '2026-09-20', 1.20, 'Dairy'),
-('Carrots', '2026-10-10', 0.80, 'Vegetable');
+INSERT INTO FoodStorage (food, expiration, cost, food_type, use_date, is_expired) VALUES
+('Apples', '2025-10-01', 1.50, 'Fruit', NULL, FALSE),
+('Chicken', '2025-10-05', 5.00, 'Meat', NULL, FALSE),
+('Milk', '2025-09-20', 1.20, 'Dairy', NULL, FALSE),
 
 COMMIT;
