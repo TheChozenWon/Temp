@@ -2,12 +2,8 @@
 
 import { useEffect, useState } from "react";
 import sharedStyles from "../shared.module.css";
-
-type FridgeItem = {
-  food: string;
-  expiration: Date;
-  is_expired?: boolean; // Added optional is_expired property
-};
+import FridgeItem, { genItemKey } from "../types/FridgeItem";
+import fetchItems from "../util/fetchItems";
 
 export default function AllItemsPage() {
   const [allItems, setAllItems] = useState<FridgeItem[]>([]);
@@ -15,21 +11,12 @@ export default function AllItemsPage() {
 
   useEffect(() => {
     const fetchAllItems = async () => {
-      try {
-        const response = await fetch("/api/inventory");
-        if (!response.ok) {
-          throw new Error(`Failed to fetch data: ${response.statusText}`);
-        }
-        const data: FridgeItem[] = await response.json();
-        const updatedData = data.map(item => ({
-          ...item,
-          is_expired: new Date(item.expiration) < new Date(),
-        }));
-        setAllItems(updatedData);
-      } catch (err) {
-        console.error("Error fetching items:", err);
-        setError("Failed to load items. Please try again later.");
-      }
+      fetchItems()
+        .then(setAllItems)
+        .catch(err => {
+          setError("Failed to fetch items");
+          console.error(err);
+        });
     };
     fetchAllItems();
   }, []);
@@ -87,8 +74,8 @@ export default function AllItemsPage() {
           <div className={sharedStyles.nestedCard}>
             <h2>Non-Expired Items</h2>
             <ul>
-              {nonExpiredItems.map((item, index) => (
-                <li key={index}>
+              {nonExpiredItems.map(item => (
+                <li key={genItemKey(item)}>
                   {item.food} - Use by: {new Date(item.expiration).toLocaleDateString()}
                 </li>
               ))}
@@ -97,8 +84,8 @@ export default function AllItemsPage() {
           <div className={sharedStyles.nestedCard}>
             <h2>Expired Items</h2>
             <ul>
-              {expiredItems.map((item, index) => (
-                <li key={index}>
+              {expiredItems.map(item => (
+                <li key={genItemKey(item)}>
                   {item.food} - Expired on: {new Date(item.expiration).toLocaleDateString()}
                 </li>
               ))}

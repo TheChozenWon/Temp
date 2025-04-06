@@ -3,13 +3,8 @@
 import { useEffect, useState } from "react";
 import sharedStyles from "../shared.module.css";
 import styles from "./page.module.css";
-
-type FridgeItem = {
-  food: string;
-  expiration: Date;
-  quantity: number;
-  food_type: string;
-}
+import FridgeItem, { genItemKey } from "../types/FridgeItem";
+import fetchItems from "../util/fetchItems";
 
 enum SuccessMode {
   NONE,
@@ -33,13 +28,7 @@ export default function InventoryPage() {
   const [ allItems, setAllItems ] = useState<FridgeItem[]>([createFakeItem()]);
 
   useEffect(() => {
-    const fetchItems = async () => {
-      const response = await fetch("/api/inventory");
-      const data = await response.json();
-      data[data.length] = createFakeItem();
-      setAllItems(data);
-    };
-    fetchItems();
+    fetchItems().then(setAllItems);
   }, []);
 
   const itemIsEmpty = (item: FridgeItem) => {
@@ -117,7 +106,7 @@ export default function InventoryPage() {
           <h1>Inventory</h1>
           <ul>
             {allItems.map((item, index) => (
-              <li key={index}>
+              <li key={genItemKey(item)}>
                 <h2>{item.food || (index === allItems.length - 1 ? "New Item" : "Unknown Food Item")}</h2>
                 <input
                   type="text"
