@@ -108,6 +108,7 @@ export default function InventoryPage() {
   };
   
   return (
+    <div className={styles.animationWrapper}>
     <div className={`${styles.wrapper} ${sharedStyles.cardPage}`}>
       <div className={`${sharedStyles.container} ${styles.container}`}>
         <form onSubmit={handleSubmit}>
@@ -174,6 +175,7 @@ export default function InventoryPage() {
             Web design is my passion!
         </p>
       </div>
+    </div>
     </div>
   );
 }
