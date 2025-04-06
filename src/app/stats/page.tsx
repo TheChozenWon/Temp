@@ -36,14 +36,23 @@ export default function AllItemsPage() {
     const totalItems = items.length;
     const expiredItems = items.filter(
       item => item.is_expired && new Date(item.expiration) >= new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
-    ).length;
+    );
 
     const itemsUsed = items.filter(item => item.use_date).length;
     const itemsBought = totalItems;
+    const numItemsExpired = expiredItems.length;
+    const expiredPercentage = totalItems > 0 ? (numItemsExpired / totalItems) * 100 : 0;
 
-    const expiredPercentage = totalItems > 0 ? (expiredItems / totalItems) * 100 : 0;
+    const itemsUsedByQty = items.filter(item => item.use_date).reduce((acc, item) => acc + item.quantity, 0);
+    const itemsBoughtByQty = items.reduce((acc, item) => acc + item.quantity, 0);
+    const numItemsExpiredByQty = expiredItems.reduce((acc, item) => acc + item.quantity, 0);
+    const expiredPercentageByQty = itemsBoughtByQty > 0 ? (numItemsExpiredByQty / itemsBoughtByQty) * 100 : 0;
 
-    return { itemsUsed, itemsBought, expiredPercentage };
+    return {
+      itemsUsed, itemsBought, expiredPercentage,
+      itemsUsedByQty, itemsBoughtByQty, expiredPercentageByQty,
+      numItemsExpired, numItemsExpiredByQty
+    };
   };
 
   const categorizeItems = (items: FridgeItem[]) => {
@@ -62,7 +71,11 @@ export default function AllItemsPage() {
   };
 
   const subsetFoodItems = filterByFoodType(allItems, foodTypeFilter);
-  const { itemsUsed, itemsBought, expiredPercentage } = calculateStats(subsetFoodItems);
+  const {
+    itemsUsed, itemsBought, expiredPercentage,
+    itemsUsedByQty, itemsBoughtByQty, expiredPercentageByQty,
+    numItemsExpired, numItemsExpiredByQty
+  } = calculateStats(subsetFoodItems);
   const { expiredItems, nonExpiredItems, usedItems } = categorizeItems(subsetFoodItems);
 
   return (
@@ -97,6 +110,8 @@ export default function AllItemsPage() {
                 <h2>Items Used vs. Items Bought</h2>
                 <p>Items Used: {itemsUsed}</p>
                 <p>Items Bought: {itemsBought}</p>
+                <p>Items Used (by qty): {itemsUsedByQty}</p>
+                <p>Items Bought (by qty): {itemsBoughtByQty}</p>
               </div>
             )}
           </div>
@@ -105,6 +120,9 @@ export default function AllItemsPage() {
               <div>
                 <h2>Food Expired in Last 14 Days</h2>
                 <p>{expiredPercentage.toFixed(2)}% of food expired</p>
+                <p>{numItemsExpired} items expired</p>
+                <p>{expiredPercentageByQty.toFixed(2)}% of food expired (by qty)</p>
+                <p>{numItemsExpiredByQty} items expired (by qty)</p>
               </div>
             )}
           </div>
