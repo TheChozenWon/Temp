@@ -4,6 +4,13 @@
   align-items: center;
   justify-content: center;
   min-height: 100%;
+  background: rebeccapurple;
+}
+
+.title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
 }
 
 .input {

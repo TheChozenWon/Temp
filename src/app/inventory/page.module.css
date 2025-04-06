@@ -12,7 +12,7 @@
 }
 
 .wrapper {
-  background: linear-gradient(to bottom right, red, orange, yellow, green, blue, indigo, violet);
+  background: linear-gradient(to bottom right, red, orange, yellow, green, blue, indigo, violet) !important;
   animation: spinon .8s linear normal;
   padding-bottom: 9em;
 }

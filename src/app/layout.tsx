@@ -28,6 +28,7 @@ type PageButton = {
 const pageButtons: PageButton[] = [
   { label: "Home", href: "/" },
   { label: "Inventory", href: "/inventory" },
+  { label: "Quick Inventory", href: "/quick_inv" },
   { label: "Expires", href: "/expires" },
   { label: "Stats", href: "/stats" },
 ];

@@ -7,7 +7,7 @@ import styles from "./page.module.css";
 type FridgeItem = {
   food: string;
   expiration: Date;
-  cost: number;
+  quantity: number;
   food_type: string;
 }
 
@@ -21,7 +21,7 @@ function createFakeItem(): FridgeItem {
   return {
     food: "",
     expiration: new Date(),
-    cost: 0,
+    quantity: 0,
     food_type: ""
   };
 }
@@ -56,7 +56,7 @@ export default function InventoryPage() {
       }
 
       if (index === newItems.length - 1 && !itemIsEmpty(newItems[index])) {
-        newItems.push({ food: "", expiration: new Date(), cost: 0, food_type: "" });
+        newItems.push({ food: "", expiration: new Date(), quantity: 0, food_type: "" });
       }
 
       return newItems;
@@ -67,7 +67,7 @@ export default function InventoryPage() {
     const validatedItems = [];
     for (let i = 0; i < items.length - 1; i++) {
       const item = items[i];
-      if (item.food && item.expiration && item.cost && item.food_type) {
+      if (item.food && item.expiration && item.quantity && item.food_type) {
         validatedItems.push(item);
       } else {
         return null;
@@ -136,9 +136,9 @@ export default function InventoryPage() {
                 <input
                   type="number"
                   className={sharedStyles.input}
-                  placeholder="Cost"
-                  value={item.cost}
-                  onChange={(e) => updateItem(index, "cost", e.target.value)}
+                  placeholder="Quantity"
+                  value={item.quantity}
+                  onChange={(e) => updateItem(index, "quantity", e.target.value)}
                   min={0}
                 />
                 <input

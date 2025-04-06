@@ -14,8 +14,8 @@ export async function POST(request: Request) {
   await db.run("DELETE FROM FoodStorage");
   for (const item of allItems) {
     await db.run(
-      "INSERT INTO FoodStorage (food, expiration, cost, food_type) VALUES (?, ?, ?, ?)",
-      [item.food, item.expiration, item.cost, item.food_type]
+      "INSERT INTO FoodStorage (food, expiration, quantity, food_type) VALUES (?, ?, ?, ?)",
+      [item.food, item.expiration, item.quantity, item.food_type]
     );
   }
   await db.run("COMMIT");
