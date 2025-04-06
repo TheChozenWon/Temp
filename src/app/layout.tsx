@@ -45,7 +45,7 @@ export default function RootLayout({
           <div className={styles.logo}>
             <Image
               className={styles.logoImage}
-              src="/favicon.ico"
+              src="/logo.svg"
               alt="Preservio Logo"
               width={40}
               height={40}
