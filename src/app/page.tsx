@@ -5,11 +5,10 @@ export default function Home() {
     <div className={styles.container}>
       <main className={styles.main}>
         <div className={styles.hero}>
-          <blockquote>
-            "The U.S. wastes over 120 billion pounds of food every year.
-            </blockquote>
+          <h1>The U.S. wastes over 120 billion pounds of food every year.</h1>
+          <h2>That's 325 pounds of waste per person</h2>
           <p>Make the Most of your Meal. Fight Waste. Save the Planet.</p>
-        </div>
+        
 {/* 
         <section className={styles.mission}>
           <h2>Our mission: Prevent food waste</h2>
@@ -21,8 +20,11 @@ export default function Home() {
         </section> */}
 
         <button className={styles.button}>Start Saving</button>
-      </main>
+      
       <button className={styles.addNewButton}>Add New</button>
+      </div>
+    
+    </main>
     </div>
   );
 }
