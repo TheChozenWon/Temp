@@ -1,3 +1,11 @@
+# YOUTUBE LINK
+
+https://youtu.be/0Cu4L3PjDTg
+
+Group Name: Preservio
+
+Group Members: Jason Gronn, Khoi Thai, Sylvia Nguyen, kong Won
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
