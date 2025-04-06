@@ -23,6 +23,7 @@ function sortItems(items: FridgeItem[]): FridgeItem[] {
 
 export default function ExpirationPage() {
   const [allItems, setAllItems] = useState<FridgeItem[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     fetchItems().then((items) => setAllItems(sortItems(items)));
@@ -48,12 +49,22 @@ export default function ExpirationPage() {
     return !!item.use_date;
   };
 
+  const filteredItems = allItems.filter((item) =>
+    item.food.toLowerCase().startsWith(searchTerm.toLowerCase())
+  );
+
   return (
     <div className={sharedStyles.cardPage}>
       <div className={sharedStyles.container}>
         <h1 className={minilistStyles.title}>Food Expiration Info</h1>
+        <input
+          type="text"
+          placeholder="Search food..."
+          className={sharedStyles.input}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
         <div className={minilistStyles.foodBoxContainer}>
-          {allItems.map((item: FridgeItem) => (
+          {filteredItems.map((item: FridgeItem) => (
             <div
               key={genItemKey(item)}
               className={`
