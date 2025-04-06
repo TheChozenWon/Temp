@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import sharedStyles from "../shared.module.css";
+import minilistStyles from "../minilist.module.css";
 
 type FridgeItem = {
   food: string;
@@ -68,13 +69,13 @@ export default function QuickInventoryPage() {
     <div className={sharedStyles.cardPage}>
       <div className={sharedStyles.container}>
         <h1 className={sharedStyles.title}>Inventory at a Glance</h1>
-        <div className={styles.foodBoxContainer}>
+        <div className={minilistStyles.foodBoxContainer}>
           {allItems.map((item: FridgeItem) => (
-            <div key={item.food + "_" + item.expiration.toString()} className={styles.foodBox}>
-              <div className={styles.foodName}>{item.food}</div>
-              <div className={styles.foodType}>{item.food_type}</div>
-              <div className={styles.foodQuantity}>Quantity: {item.quantity}</div>
-              <div className={styles.foodExpiration}>
+            <div key={item.food + "_" + item.expiration.toString()} className={minilistStyles.foodBox}>
+              <div className={minilistStyles.foodName}>{item.food}</div>
+              <div className={minilistStyles.foodType}>{item.food_type}</div>
+              <div className={minilistStyles.foodQuantity}>Quantity: {item.quantity}</div>
+              <div className={minilistStyles.foodExpiration}>
                 Expires {new Date(item.expiration).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "2-digit",

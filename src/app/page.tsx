@@ -1,4 +1,3 @@
-import Image from "next/image";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -8,12 +7,6 @@ export default function Home() {
         <div className={styles.hero}>
           <h1>Make the Most of your Meal. Fight Waste. Save the Planet.</h1>
           <p>Track food expiration dates to reduce waste and eat smarter.</p>
-          <Image
-            src="/background.png"
-            alt="Background Image"
-            width={500}
-            height={300}
-          />
         </div>
 
         <section className={styles.mission}>

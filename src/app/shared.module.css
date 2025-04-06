@@ -34,7 +34,15 @@
   text-align: center;
   min-width: 25em;
   margin: 3rem auto;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nestedCard {
+  border-radius: 16px;
+  padding: 2rem;
+  min-width: 25em;
+  margin: .5rem auto;
+  background-color: #dfdfdf;
 }
 
 .submit {
@@ -58,10 +66,10 @@
 .horizontalContainer {
   display: flex;
   justify-content: space-between;
-  gap: 20px; /* Optional: Adjust spacing between containers */
+  gap: 1rem;
 }
 
 .title {
   text-align: center;
-  margin-bottom: 2rem; /* Optional: Adjust spacing below the title */
+  margin-bottom: 2rem;
 }
