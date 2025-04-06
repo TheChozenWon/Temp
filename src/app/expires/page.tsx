@@ -6,34 +6,23 @@ import styles from "./page.module.css";
 type FridgeItem = {
   food: string;
   expiration: Date;
-  cost: number;
-  food_type: string;
 };
 
 type FoodItem = {
   food: string;
-  expiration: string;
+  expiration?: string;
+  use_date: string | null;
+  is_expired: string;
 };
-
-enum SuccessMode {
-  NONE,
-  SUCCESS,
-  ERROR,
-}
 
 function createFakeItem(): FridgeItem {
   return {
     food: "",
     expiration: new Date(),
-    cost: 0,
-    food_type: "",
   };
 }
 
-export default function InventoryPage() {
-  const [mode, setMode] = useState(SuccessMode.NONE);
-  const [issue, setIssue] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+export default function ExpirationPage() {
   const [allItems, setAllItems] = useState<FridgeItem[]>([createFakeItem()]);
 
   useEffect(() => {
@@ -46,133 +35,346 @@ export default function InventoryPage() {
     fetchItems();
   }, []);
 
-  const itemIsEmpty = (item: FridgeItem) => {
-    return !item.food;
-  };
-
-  const updateItem = (
-    index: number,
-    field: keyof FridgeItem,
-    value: string | number | Date
-  ) => {
-    setAllItems((prevItems) => {
-      const newItems = [...prevItems];
-      newItems[index] = { ...newItems[index], [field]: value };
-
-      if (itemIsEmpty(newItems[index]) && index !== newItems.length - 1) {
-        newItems.splice(index, 1);
-      }
-
-      if (index === newItems.length - 1 && !itemIsEmpty(newItems[index])) {
-        newItems.push({
-          food: "",
-          expiration: new Date(),
-          cost: 0,
-          food_type: "",
-        });
-      }
-
-      return newItems;
-    });
-  };
-
-  const validateItems = (items: FridgeItem[]): FridgeItem[] | null => {
-    const validatedItems = [];
-    for (let i = 0; i < items.length - 1; i++) {
-      const item = items[i];
-      if (item.food && item.expiration && item.cost && item.food_type) {
-        validatedItems.push(item);
-      } else {
-        return null;
-      }
-    }
-
-    return validatedItems;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const validatedItems = validateItems(allItems);
-    if (!validatedItems) {
-      setIssue("Please fill in all fields");
-      setMode(SuccessMode.ERROR);
-      return;
-    }
-
-    setMode(SuccessMode.NONE);
-    try {
-      const response = await fetch("/api/inventory", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(validatedItems),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save items");
-      }
-
-      const data = await response.json();
-      setSuccess(data.message);
-      setMode(SuccessMode.SUCCESS);
-    } catch (error) {
-      console.error("Error saving items:", error);
-      setIssue("Failed to save items");
-      setMode(SuccessMode.ERROR);
-    }
-  };
-
-  const foodData: FoodItem[] = [
-    { food: "Apples", expiration: "2025-4-07" },
-    { food: "Chicken", expiration: "2025-4-07" },
-    { food: "Milk", expiration: "2025-4-07" },
-    { food: "Bread", expiration: "2025-4-07" },
-    { food: "Eggs", expiration: "2025-4-07" },
-    { food: "Carrots", expiration: "2025-4-07" },
-    { food: "Rice", expiration: "2025-4-07" },
-    { food: "Fish", expiration: "2025-4-07" },
-    { food: "Yogurt", expiration: "2025-4-07" },
-    { food: "Potatoes", expiration: "2025-4-07" },
-    { food: "Pasta", expiration: "2025-4-07" },
-    { food: "Cheese", expiration: "2025-4-07" },
-    { food: "Broccoli", expiration: "2025-4-07" },
-    { food: "Beef", expiration: "2025-4-07" },
-    { food: "Bananas", expiration: "2025-4-07" },
+  const foodData = [
+    {
+      food: "milk",
+      expiration: "2025-04-01",
+      use_date: "2025-03-20",
+      is_expired: "true",
+    },
+    {
+      food: "bread",
+      expiration: "2025-04-03",
+      use_date: "2025-03-15",
+      is_expired: "true",
+    },
+    {
+      food: "chicken",
+      expiration: "2025-04-08",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "spinach",
+      expiration: "2025-03-25",
+      use_date: "2025-03-10",
+      is_expired: "true",
+    },
+    {
+      food: "cheese",
+      expiration: "2025-04-12",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "rice",
+      expiration: "2025-04-20",
+      use_date: "2025-03-25",
+      is_expired: "false",
+    },
+    {
+      food: "carrot",
+      expiration: "2025-04-02",
+      use_date: null,
+      is_expired: "true",
+    },
+    {
+      food: "beef",
+      expiration: "2025-04-10",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "yogurt",
+      expiration: "2025-04-05",
+      use_date: "2025-03-18",
+      is_expired: "true",
+    },
+    {
+      food: "pasta",
+      expiration: "2025-04-25",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "lettuce",
+      expiration: "2025-04-04",
+      use_date: "2025-03-22",
+      is_expired: "true",
+    },
+    {
+      food: "fish",
+      expiration: "2025-04-15",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "eggplant",
+      expiration: "2025-03-27",
+      use_date: "2025-03-12",
+      is_expired: "true",
+    },
+    {
+      food: "butter",
+      expiration: "2025-04-06",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "quinoa",
+      expiration: "2025-04-28",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "potato",
+      expiration: "2025-04-07",
+      use_date: "2025-03-30",
+      is_expired: "false",
+    },
+    {
+      food: "turkey",
+      expiration: "2025-04-20",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "cream",
+      expiration: "2025-04-01",
+      use_date: "2025-03-17",
+      is_expired: "true",
+    },
+    {
+      food: "oats",
+      expiration: "2025-04-30",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "broccoli",
+      expiration: "2025-03-29",
+      use_date: "2025-03-14",
+      is_expired: "true",
+    },
+    {
+      food: "sausage",
+      expiration: "2025-04-18",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "cereal",
+      expiration: "2025-04-25",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "zucchini",
+      expiration: "2025-04-02",
+      use_date: "2025-03-20",
+      is_expired: "true",
+    },
+    {
+      food: "ham",
+      expiration: "2025-04-28",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "sour cream",
+      expiration: "2025-03-26",
+      use_date: "2025-03-11",
+      is_expired: "true",
+    },
+    {
+      food: "flour",
+      expiration: "2025-04-30",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "cauliflower",
+      expiration: "2025-03-24",
+      use_date: "2025-03-09",
+      is_expired: "true",
+    },
+    {
+      food: "bacon",
+      expiration: "2025-04-05",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "cream cheese",
+      expiration: "2025-04-04",
+      use_date: "2025-03-21",
+      is_expired: "true",
+    },
+    {
+      food: "corn",
+      expiration: "2025-04-15",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "bell pepper",
+      expiration: "2025-03-23",
+      use_date: "2025-03-08",
+      is_expired: "true",
+    },
+    {
+      food: "lamb",
+      expiration: "2025-04-30",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "ice cream",
+      expiration: "2025-03-28",
+      use_date: "2025-03-13",
+      is_expired: "true",
+    },
+    {
+      food: "pancake mix",
+      expiration: "2025-04-20",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "asparagus",
+      expiration: "2025-03-22",
+      use_date: "2025-03-07",
+      is_expired: "true",
+    },
+    {
+      food: "duck",
+      expiration: "2025-04-25",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "whipped cream",
+      expiration: "2025-04-01",
+      use_date: "2025-03-19",
+      is_expired: "true",
+    },
+    {
+      food: "bread crumbs",
+      expiration: "2025-04-30",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "green beans",
+      expiration: "2025-04-03",
+      use_date: "2025-03-16",
+      is_expired: "true",
+    },
+    {
+      food: "veal",
+      expiration: "2025-04-28",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "cream soda",
+      expiration: "2025-03-29",
+      use_date: "2025-03-14",
+      is_expired: "true",
+    },
+    {
+      food: "granola",
+      expiration: "2025-04-25",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "sweet potato",
+      expiration: "2025-03-30",
+      use_date: "2025-03-15",
+      is_expired: "true",
+    },
+    {
+      food: "rabbit",
+      expiration: "2025-04-20",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "cheddar cheese",
+      expiration: "2025-04-02",
+      use_date: "2025-03-18",
+      is_expired: "true",
+    },
+    {
+      food: "couscous",
+      expiration: "2025-04-30",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "egg",
+      expiration: "2025-03-31",
+      use_date: "2025-03-16",
+      is_expired: "true",
+    },
+    {
+      food: "goat cheese",
+      expiration: "2025-04-25",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "bulgur wheat",
+      expiration: "2025-04-30",
+      use_date: null,
+      is_expired: "false",
+    },
+    {
+      food: "mushroom",
+      expiration: "2025-03-26",
+      use_date: "2025-03-11",
+      is_expired: "true",
+    },
+    {
+      food: "pork",
+      expiration: "2025-04-05",
+      use_date: null,
+      is_expired: "false",
+    },
   ];
 
   const today = new Date();
 
-  const calculateDaysUntilExpiry = (expirationDate: string): number => {
+  const calculateDaysUntilExpiry = (expirationDate?: string): number => {
+    if (!expirationDate) {
+      return 0;
+    }
     const expiryDate = new Date(expirationDate);
     const timeDifference = expiryDate.getTime() - today.getTime();
     const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
     return daysDifference;
   };
 
-  const formatExpiryString = (food: string, expiration: string): string => {
-    const daysUntilExpiry = calculateDaysUntilExpiry(expiration);
-    const dotsLength = 30 - food.length;
-    const dots = ".".repeat(dotsLength > 0 ? dotsLength : 0);
-    return `${food}${dots}expire in ${daysUntilExpiry} days`;
-  };
-
   return (
     <div className={`${styles.wrapper}`}>
       <div className={styles.container}>
-        <form onSubmit={handleSubmit}>
-          <h1 className={styles.title}>List of Food Expiry</h1>
-          <div className={styles.foodBoxContainer}>
-            {foodData.map((item: FoodItem) => (
-              <div key={item.food} className={styles.foodBox}>
-                <div className={styles.foodName}>{item.food}</div>
-                <div className={styles.expirationDate}>
-                  {calculateDaysUntilExpiry(item.expiration)} days left
-                </div>
+        <h1 className={styles.title}>List of Food Expiry</h1>
+        <div className={styles.foodBoxContainer}>
+          {foodData.map((item: FoodItem) => (
+            <div key={item.food} className={styles.foodBox}>
+              <div className={styles.foodName}>{item.food}</div>
+              <div className={styles.expirationDate}>
+                Expiration: {item.expiration} (
+                {calculateDaysUntilExpiry(item.expiration)} days)
               </div>
-            ))}
-          </div>
-        </form>
+              <div className={styles.useDate}>
+                Use Date: {item.use_date ? item.use_date : "N/A"}
+              </div>
+              <div className={styles.isExpired}>Expired: {item.is_expired}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
