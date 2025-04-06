@@ -6,3 +6,18 @@
   font-size: 14px;
   color: #555;
 }
+
+.expired {
+  background: rgb(255, 237, 237) !important;
+  color: rgb(255, 0, 0) !important;
+}
+
+.expiring {
+  background: rgb(255, 255, 204) !important;
+  color: rgb(255, 153, 0) !important;
+}
+
+.used {
+  background: rgb(204, 255, 204) !important;
+  color: rgb(0, 153, 0) !important;
+}
