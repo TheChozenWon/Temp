@@ -112,7 +112,7 @@ export default function InventoryPage() {
   
   return (
     <div className={`${styles.wrapper} ${sharedStyles.cardPage}`}>
-      <div className={sharedStyles.container}>
+      <div className={`${sharedStyles.container} ${styles.container}`}>
         <form onSubmit={handleSubmit}>
           <h1>Inventory</h1>
           <ul>

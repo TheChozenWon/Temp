@@ -12,14 +12,10 @@
 }
 
 .wrapper {
-  background: linear-gradient(to bottom right, red, orange, yellow, green, blue, indigo, violet);
   animation: spinon .8s linear normal;
   padding-bottom: 9em;
 }
 
-.container {
-  transform: rotate(5deg);
-}
 
 @keyframes spinon {
   0% {
