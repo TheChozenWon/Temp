@@ -19,11 +19,24 @@
   align-items: center;
 }
 
-.hero {
+/* .hero {
   margin-bottom: 30px;
   text-align: center;
+} */
+.hero {
+  background-image: url('/background.png'); 
+  background-size: cover;        
+  background-position: center;   
+  background-repeat: no-repeat;
+  color: white;                  
+  padding: 5rem 2rem;
+  text-align: center;
+  min-height: 60vh;              
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-
 .mission {
   margin-top: 30px;
   padding: 20px;
