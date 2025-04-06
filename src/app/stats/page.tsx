@@ -7,6 +7,7 @@ import fetchItems from "../util/fetchItems";
 
 export default function AllItemsPage() {
   const [allItems, setAllItems] = useState<FridgeItem[]>([]);
+  const [foodTypeFilter, setFoodTypeFilter] = useState<string>("all");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -21,13 +22,23 @@ export default function AllItemsPage() {
     fetchAllItems();
   }, []);
 
-  const calculateStats = () => {
-    const totalItems = allItems.length;
-    const expiredItems = allItems.filter(
+  const determineAllFoodTypes = (items: FridgeItem[]) => {
+    const foodTypes = new Set<string>();
+    items.forEach(item => {
+      if (item.food_type) {
+        foodTypes.add(item.food_type);
+      }
+    });
+    return Array.from(foodTypes);
+  };
+
+  const calculateStats = (items: FridgeItem[]) => {
+    const totalItems = items.length;
+    const expiredItems = items.filter(
       item => item.is_expired && new Date(item.expiration) >= new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
     ).length;
 
-    const itemsUsed = Math.floor(totalItems * 0.6); // Example: 60% of items are used
+    const itemsUsed = items.filter(item => item.use_date).length;
     const itemsBought = totalItems;
 
     const expiredPercentage = totalItems > 0 ? (expiredItems / totalItems) * 100 : 0;
@@ -35,20 +46,48 @@ export default function AllItemsPage() {
     return { itemsUsed, itemsBought, expiredPercentage };
   };
 
-  const categorizeItems = () => {
-    const expiredItems = allItems.filter(item => item.is_expired);
-    const nonExpiredItems = allItems.filter(item => !item.is_expired);
+  const categorizeItems = (items: FridgeItem[]) => {
+    const expiredItems = items.filter(item => item.is_expired && !item.use_date);
+    const nonExpiredItems = items.filter(item => !item.is_expired && !item.use_date);
+    const usedItems = items.filter(item => item.use_date);
 
-    return { expiredItems, nonExpiredItems };
+    return { expiredItems, nonExpiredItems, usedItems };
   };
 
-  const { itemsUsed, itemsBought, expiredPercentage } = calculateStats();
-  const { expiredItems, nonExpiredItems } = categorizeItems();
+  const filterByFoodType = (items: FridgeItem[], foodType: string) => {
+    if (foodType === "all") {
+      return items;
+    }
+    return items.filter(item => item.food_type === foodType);
+  };
+
+  const subsetFoodItems = filterByFoodType(allItems, foodTypeFilter);
+  const { itemsUsed, itemsBought, expiredPercentage } = calculateStats(subsetFoodItems);
+  const { expiredItems, nonExpiredItems, usedItems } = categorizeItems(subsetFoodItems);
 
   return (
     <div className={sharedStyles.cardPage}>
       <div className={sharedStyles.container}>
         <h1 className={sharedStyles.title}>Statistics</h1>
+        <label htmlFor="foodTypeFilter" className={sharedStyles.label}>
+          Filter by Food Type:
+        </label>
+        <select
+          className={sharedStyles.input}
+          name="foodTypeFilter"
+          value={foodTypeFilter}
+          onChange={e => {
+            setFoodTypeFilter(e.target.value);
+            setError(null);
+          }}
+        >
+          <option value="all">All Items</option>
+          {determineAllFoodTypes(allItems).map((foodType, index) => (
+            <option key={index} value={foodType}>
+              {foodType}
+            </option>
+          ))}
+        </select>
         <div style={{ backgroundColor: "white" }} className={sharedStyles.horizontalContainer}>
           <div className={sharedStyles.nestedCard}>
             {error ? (
@@ -73,24 +112,34 @@ export default function AllItemsPage() {
         <div style={{ backgroundColor: "white" }} className={sharedStyles.horizontalContainer}>
           <div className={sharedStyles.nestedCard}>
             <h2>Non-Expired Items</h2>
-            <ul>
+            { nonExpiredItems.length > 0 && <ul>
               {nonExpiredItems.map(item => (
                 <li key={genItemKey(item)}>
                   {item.food} - Use by: {new Date(item.expiration).toLocaleDateString()}
                 </li>
               ))}
-            </ul>
+            </ul> || <p>No non-expired items</p>}
           </div>
           <div className={sharedStyles.nestedCard}>
             <h2>Expired Items</h2>
-            <ul>
+            { expiredItems.length > 0 && <ul>
               {expiredItems.map(item => (
                 <li key={genItemKey(item)}>
                   {item.food} - Expired on: {new Date(item.expiration).toLocaleDateString()}
                 </li>
               ))}
-            </ul>
+            </ul> || <p>No expired items</p>}
           </div>
+        </div>
+        <div className={sharedStyles.nestedCard}>
+          <h2>Used Items</h2>
+          { usedItems.length > 0 && <ul>
+            {usedItems.map(item => (
+              <li key={genItemKey(item)}>
+                {item.food} - Used on: {new Date(item.use_date!).toLocaleDateString()}
+              </li>
+            ))}
+          </ul> || <p>No used items</p>}
         </div>
       </div>
     </div>
