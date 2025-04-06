@@ -26,7 +26,7 @@
   display: flex;
   flex-direction: column;
   grid-area: navbar;
-  background-color: #f5f5dc;
+  background-color: #c1cfa1;
 }
 
 .navButton {
@@ -41,10 +41,10 @@
 }
 
 .navButton:hover {
-  background-color: #b2dbb2;
+  background-color: #9eb171;
 }
 .navButton:focus {
-  background-color: #8fbc8f;
+  background-color: #537e53;
   outline: none;
 }
 
@@ -57,7 +57,7 @@
   height: 100vh;
   max-height: 100vh;
   display: grid;
-  grid-template-columns: 20rem 1fr;
+  grid-template-columns: 15rem 1fr;
   grid-template-rows: auto 1fr;
   grid-template-areas:
     "header header"

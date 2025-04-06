@@ -6,7 +6,7 @@ export default function Home() {
     <div className={styles.container}>
       <main className={styles.main}>
         <div className={styles.hero}>
-          <h1>Keep Food Fresh. Fight Waste. Save the Planet.</h1>
+          <h1>Make the Most of your Meal. Fight Waste. Save the Planet.</h1>
           <p>Track food expiration dates to reduce waste and eat smarter.</p>
           <Image
             src="/background.png"
