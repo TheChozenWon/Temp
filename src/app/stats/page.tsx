@@ -133,7 +133,7 @@ export default function AllItemsPage() {
             { nonExpiredItems.length > 0 && <ul>
               {nonExpiredItems.map(item => (
                 <li key={genItemKey(item)}>
-                  {item.food} - Use by: {new Date(item.expiration).toLocaleDateString()}
+                  {item.food} - Use by: {new Date(item.expiration).toLocaleDateString()} (qty: {item.quantity})
                 </li>
               ))}
             </ul> || <p>No non-expired items</p>}
@@ -143,7 +143,7 @@ export default function AllItemsPage() {
             { expiredItems.length > 0 && <ul>
               {expiredItems.map(item => (
                 <li key={genItemKey(item)}>
-                  {item.food} - Expired on: {new Date(item.expiration).toLocaleDateString()}
+                  {item.food} - Expired on: {new Date(item.expiration).toLocaleDateString()} (qty: {item.quantity})
                 </li>
               ))}
             </ul> || <p>No expired items</p>}
@@ -154,7 +154,7 @@ export default function AllItemsPage() {
           { usedItems.length > 0 && <ul>
             {usedItems.map(item => (
               <li key={genItemKey(item)}>
-                {item.food} - Used on: {new Date(item.use_date!).toLocaleDateString()}
+                {item.food} - Used on: {new Date(item.use_date!).toLocaleDateString()} (qty: {item.quantity})
               </li>
             ))}
           </ul> || <p>No used items</p>}
