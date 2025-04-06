@@ -1,7 +1,10 @@
 @import url(https://fonts.googleapis.com/css?family=Comic+Sans+MS);
 
 .memetext {
-  font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", sans-serif;
+  position: fixed;
+  bottom: -3em;
+  right: -3em;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif;
   font-size: 2.5rem;
   font-weight: bold;
   color: yellow;
@@ -9,26 +12,18 @@
 }
 
 .wrapper {
-  background: linear-gradient(
-    to bottom right,
-    red,
-    orange,
-    yellow,
-    green,
-    blue,
-    indigo,
-    violet
-  ) !important;
-  animation: spinon 2s linear normal;
+  background: linear-gradient(to bottom right, red, orange, yellow, green, blue, indigo, violet) !important;
+  animation: spinon .8s linear normal;
   padding-bottom: 9em;
+}
+
+.container {
+  transform: rotate(5deg);
 }
 
 @keyframes spinon {
   0% {
     transform: rotate(0deg) scale(0);
-  }
-  50% {
-    transform: rotate(360deg);
   }
   100% {
     transform: rotate(360deg);
@@ -45,28 +40,4 @@
   100% {
     background-position: 0% 50%;
   }
-}
-
-.foodBox {
-  border: 1px solid black;
-  padding: 5px;
-  margin-bottom: 5px;
-}
-
-.deleteButton {
-  background-color: red;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.addButton {
-  background-color: green;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  margin-left: 5px;
 }

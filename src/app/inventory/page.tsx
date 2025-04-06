@@ -9,7 +9,7 @@ import fetchItems from "../util/fetchItems";
 enum SuccessMode {
   NONE,
   SUCCESS,
-  ERROR,
+  ERROR
 }
 
 function createFakeItem(): FridgeItem {
@@ -17,55 +17,54 @@ function createFakeItem(): FridgeItem {
     food: "",
     expiration: new Date(),
     quantity: 0,
-    food_type: "",
+    food_type: ""
   };
 }
 
 export default function InventoryPage() {
-  const [mode, setMode] = useState(SuccessMode.NONE);
-  const [issue, setIssue] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [allItems, setAllItems] = useState<FridgeItem[]>([createFakeItem()]);
+  const [ mode, setMode ] = useState(SuccessMode.NONE);
+  const [ issue, setIssue ] = useState<string | null>(null);
+  const [ success, setSuccess ] = useState<string | null>(null);
+  const [ allItems, setAllItems ] = useState<FridgeItem[]>([createFakeItem()]);
 
   useEffect(() => {
-    fetchItems().then((items) => {
-      const parsedItems = items.map((item) => ({
-        ...item,
-        expiration: new Date(item.expiration), // Ensure expiration is a Date object
-      }));
-      setAllItems(parsedItems);
-    });
+    fetchItems().then(setAllItems);
   }, []);
 
   const itemIsEmpty = (item: FridgeItem) => {
     return !item.food;
-  };
+  }
 
-  const updateItem = (
-    index: number,
-    field: keyof FridgeItem,
-    value: string | number | Date
-  ) => {
-    setAllItems((prevItems) => {
+  const updateItem = (index: number, field: keyof FridgeItem, value: string | number | Date) => {
+    setAllItems(prevItems => {
       const newItems = [...prevItems];
       newItems[index] = { ...newItems[index], [field]: value };
+
+      if (itemIsEmpty(newItems[index]) && index !== newItems.length - 1) {
+        newItems.splice(index, 1);
+      }
+
+      if (index === newItems.length - 1 && !itemIsEmpty(newItems[index])) {
+        newItems.push({ food: "", expiration: new Date(), quantity: 0, food_type: "" });
+      }
+
       return newItems;
     });
-  };
+  }
 
   const validateItems = (items: FridgeItem[]): FridgeItem[] | null => {
     const validatedItems = [];
-    for (let i = 0; i < items.length; i++) {
-      // Include the last item
+    for (let i = 0; i < items.length - 1; i++) {
       const item = items[i];
       if (item.food && item.expiration && item.quantity && item.food_type) {
         validatedItems.push(item);
       } else {
-        return null; // Return null if any item is invalid
+        return null;
       }
     }
+
     return validatedItems;
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,9 +80,9 @@ export default function InventoryPage() {
       const response = await fetch("/api/inventory", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(validatedItems),
+        body: JSON.stringify(validatedItems)
       });
 
       if (!response.ok) {
@@ -99,7 +98,7 @@ export default function InventoryPage() {
       setMode(SuccessMode.ERROR);
     }
   };
-
+  
   return (
     <div className={`${styles.wrapper} ${sharedStyles.cardPage}`}>
       <div className={`${sharedStyles.container} ${styles.container}`}>
@@ -107,82 +106,37 @@ export default function InventoryPage() {
           <h1>Inventory</h1>
           <ul>
             {allItems.map((item, index) => (
-              <li key={index}>
-                <div className={styles.foodBox}>
-                  <h2>
-                    {item.food ||
-                      (index === allItems.length - 1
-                        ? "New Item"
-                        : "Unknown Food Item")}
-                  </h2>
-
-                  <input
-                    type="text"
-                    className={sharedStyles.input}
-                    placeholder="Food"
-                    value={item.food}
-                    onChange={(e) => updateItem(index, "food", e.target.value)}
-                  />
-
-                  <input
-                    type="date"
-                    className={sharedStyles.input}
-                    placeholder="Expiration Date"
-                    value={
-                      item.expiration instanceof Date
-                        ? item.expiration.toLocaleDateString("en-CA", {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                          })
-                        : ""
-                    }
-                    onChange={(e) =>
-                      updateItem(index, "expiration", new Date(e.target.value))
-                    }
-                  />
-                  <input
-                    type="number"
-                    className={sharedStyles.input}
-                    placeholder="Quantity"
-                    value={item.quantity}
-                    onChange={(e) =>
-                      updateItem(index, "quantity", e.target.value)
-                    }
-                    min={0}
-                  />
-                  <input
-                    type="text"
-                    className={sharedStyles.input}
-                    placeholder="Type"
-                    value={item.food_type}
-                    onChange={(e) =>
-                      updateItem(index, "food_type", e.target.value)
-                    }
-                  />
-                  <button
-                    className={styles.addButton}
-                    onClick={() => {
-                      const newItems = [...allItems];
-                      newItems.push(createFakeItem());
-                      setAllItems(newItems);
-                    }}
-                  >
-                    Add
-                  </button>
-                  <button
-                    className={styles.deleteButton}
-                    onClick={() => {
-                      if (allItems.length > 1) {
-                        const newItems = [...allItems];
-                        newItems.splice(index, 1);
-                        setAllItems(newItems);
-                      }
-                    }}
-                  >
-                    Delete
-                  </button>
-                </div>
+              <li key={genItemKey(item)}>
+                <h2>{item.food || (index === allItems.length - 1 ? "New Item" : "Unknown Food Item")}</h2>
+                <input
+                  type="text"
+                  className={sharedStyles.input}
+                  placeholder="Food"
+                  value={item.food}
+                  onChange={(e) => updateItem(index, "food", e.target.value)}
+                />
+                <input
+                  type="date"
+                  className={sharedStyles.input}
+                  placeholder="Expiration Date"
+                  value={item.expiration.toString()}
+                  onChange={(e) => updateItem(index, "expiration", e.target.value)}
+                />
+                <input
+                  type="number"
+                  className={sharedStyles.input}
+                  placeholder="Quantity"
+                  value={item.quantity}
+                  onChange={(e) => updateItem(index, "quantity", e.target.value)}
+                  min={0}
+                />
+                <input
+                  type="text"
+                  className={sharedStyles.input}
+                  placeholder="Type"
+                  value={item.food_type}
+                  onChange={(e) => updateItem(index, "food_type", e.target.value)}
+                />
               </li>
             ))}
           </ul>
@@ -192,15 +146,13 @@ export default function InventoryPage() {
             className={`${sharedStyles.input} ${sharedStyles.submit}`}
             value="Save"
           />
-          {issue && mode == SuccessMode.ERROR && (
-            <p className={sharedStyles.error}>{issue}</p>
-          )}
-          {success && mode == SuccessMode.SUCCESS && (
-            <p className={sharedStyles.success}>{success}</p>
-          )}
+          {issue && mode == SuccessMode.ERROR && <p className={sharedStyles.error}>{issue}</p>}
+          {success && mode == SuccessMode.SUCCESS && <p className={sharedStyles.success}>{success}</p>}
         </form>
+        <p className={styles.memetext}>
+            Web design is my passion!
+        </p>
       </div>
-      <p className={styles.memetext}>Web design is my passion!</p>
     </div>
   );
 }
