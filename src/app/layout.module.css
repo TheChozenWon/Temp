@@ -55,7 +55,6 @@
 
 .body {
   height: 100vh;
-  /* max-height: 100vh; */
   display: grid;
   grid-template-columns: 15rem 1fr;
   grid-template-rows: auto 1fr;

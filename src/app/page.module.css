@@ -9,7 +9,7 @@
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
-  margin-left: auto;
+  
 }
 
 .main {
@@ -36,11 +36,3 @@
   opacity: 70;        
 }
 
-
-/* .mission {
-  position: absolute
-  margin-top: 30px;
-  padding: 20px;
-  background-color: #e4502f;
-  border-radius: 5px;
-} */
