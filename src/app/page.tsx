@@ -19,9 +19,9 @@ export default function Home() {
           <div>{ "Chart will be implemented here "}</div>
         </section> */}
 
-        <button className={styles.button}>Start Saving</button>
+      <button className={styles.button}>Start Saving</button>
       
-      <button className={styles.addNewButton}>Add New</button>
+      {/* <button className={styles.addNewButton}>Add New</button> */}
       </div>
     
     </main>
