@@ -12,11 +12,12 @@ function sortItems(items: FridgeItem[]): FridgeItem[] {
     const dateA = new Date(a.expiration);
     const dateB = new Date(b.expiration);
     return (
-      (a.use_date &&  !b.use_date ? 1 : 0) ||
+      (a.use_date && !b.use_date ? 1 : 0) ||
       (b.use_date && !a.use_date ? -1 : 0) ||
-      (dateA.getTime() - dateB.getTime()) ||
-      (a.food.localeCompare(b.food) || 0)
-    )
+      dateA.getTime() - dateB.getTime() ||
+      a.food.localeCompare(b.food) ||
+      0
+    );
   });
 }
 
@@ -24,7 +25,7 @@ export default function ExpirationPage() {
   const [allItems, setAllItems] = useState<FridgeItem[]>([]);
 
   useEffect(() => {
-    fetchItems().then(items => setAllItems(sortItems(items)));
+    fetchItems().then((items) => setAllItems(sortItems(items)));
   }, []);
 
   const today = new Date();
@@ -41,7 +42,7 @@ export default function ExpirationPage() {
 
   const willExpireSoon = (item: FridgeItem): boolean => {
     return item.expiration.getDate() == today.getDate() && !item.use_date;
-  }
+  };
 
   const hasBeenUsed = (item: FridgeItem): boolean => {
     return !!item.use_date;
@@ -53,12 +54,18 @@ export default function ExpirationPage() {
         <h1 className={minilistStyles.title}>Food Expiration Info</h1>
         <div className={minilistStyles.foodBoxContainer}>
           {allItems.map((item: FridgeItem) => (
-            <div key={genItemKey(item)}
+            <div
+              key={genItemKey(item)}
               className={`
                 ${minilistStyles.foodBox}
-                ${isExpired(item) ? styles.expired :
-                  willExpireSoon(item) ? styles.expiring :
-                  hasBeenUsed(item) ? styles.used : ""
+                ${
+                  isExpired(item)
+                    ? styles.expired
+                    : willExpireSoon(item)
+                    ? styles.expiring
+                    : hasBeenUsed(item)
+                    ? styles.used
+                    : ""
                 }`}
             >
               <div className={minilistStyles.foodName}>{item.food}</div>
@@ -67,10 +74,11 @@ export default function ExpirationPage() {
                 {calculateDaysUntilExpiry(item.expiration)} days)
               </div>
               <div className={styles.useDate}>
-                Use Date: {item.use_date ? item.use_date.toLocaleDateString() : "N/A"}
+                Use Date:{" "}
+                {item.use_date ? item.use_date.toLocaleDateString() : "N/A"}
               </div>
               <div className={styles.quantity}>
-                { (item.use_date ? "Used: " : "Quantity: ") + item.quantity }
+                {(item.use_date ? "Used: " : "Quantity: ") + item.quantity}
               </div>
             </div>
           ))}
