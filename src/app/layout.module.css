@@ -41,10 +41,10 @@
 }
 
 .navButton:hover {
-  background-color: #c1cfa1;
+  background-color: #9eb171;
 }
 .navButton:focus {
-  background-color: #8fbc8f;
+  background-color: #537e53;
   outline: none;
 }
 
