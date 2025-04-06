@@ -6,8 +6,8 @@ export default function Home() {
       <main className={styles.main}>
         <div className={styles.hero}>
           <blockquote>
-            The U.S. wastes over 120 billion pounds of food every year.
-            </blockquote>;
+            "The U.S. wastes over 120 billion pounds of food every year.
+            </blockquote>
           <p>Make the Most of your Meal. Fight Waste. Save the Planet.</p>
         </div>
 {/* 
