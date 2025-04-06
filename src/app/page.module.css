@@ -37,12 +37,10 @@
 }
 
 
-.mission {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+/* .mission {
+  position: absolute
+  margin-top: 30px;
   padding: 20px;
   background-color: #e4502f;
   border-radius: 5px;
-  z-index: 10;
-}
+} */
