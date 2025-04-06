@@ -45,25 +45,6 @@ INSERT INTO FoodStorage (food, expiration, quantity, food_type, use_date) VALUES
 ('cream cheese', '2025-04-04', 6, 'dairy', NULL),
 ('corn', '2025-06-15', 20, 'grain', NULL),
 ('bell pepper', '2025-03-23', 10, 'vegetable', NULL),
-('lamb', '2025-04-30', 2, 'meat', NULL),
-('ice cream', '2025-03-28', 7, 'dairy', NULL),
-('pancake mix', '2025-06-20', 8, 'grain', NULL),
-('asparagus', '2025-03-22', 5, 'vegetable', NULL),
-('duck', '2025-05-10', 1, 'meat', NULL),
-('whipped cream', '2025-04-01', 4, 'dairy', NULL),
-('bread crumbs', '2025-07-01', 12, 'grain', NULL),
-('green beans', '2025-04-03', 9, 'vegetable', NULL),
-('veal', '2025-05-15', 1, 'meat', NULL),
-('cream soda', '2025-03-29', 6, 'dairy', NULL),
-('granola', '2025-07-10', 10, 'grain', NULL),
-('sweet potato', '2025-03-30', 14, 'vegetable', NULL),
-('rabbit', '2025-05-20', 1, 'meat', NULL),
-('cheddar cheese', '2025-04-02', 5, 'dairy', NULL),
-('couscous', '2025-08-01', 10, 'grain', NULL),
-('egg', '2025-03-31', 30, 'vegetable', NULL),
-('goat cheese', '2025-04-25', 3, 'dairy', NULL),
-('bulgur wheat', '2025-08-15', 8, 'grain', NULL),
-('mushroom', '2025-03-26', 10, 'vegetable', NULL),
-('pork', '2025-05-05', 2, 'meat', NULL);
+('lamb', '2025-04-30', 2, 'meat', NULL);
 
 COMMIT;

@@ -52,6 +52,14 @@ export default function InventoryPage() {
     });
   }
 
+  const deleteItem = (index: number) => {
+    setAllItems(prevItems => {
+      const newItems = [...prevItems];
+      newItems.splice(index, 1);
+      return newItems;
+    });
+  }
+
   const validateItems = (items: FridgeItem[]): FridgeItem[] | null => {
     const validatedItems = [];
     for (let i = 0; i < items.length - 1; i++) {
@@ -119,8 +127,12 @@ export default function InventoryPage() {
                   type="date"
                   className={sharedStyles.input}
                   placeholder="Expiration Date"
-                  value={item.expiration.toString()}
-                  onChange={(e) => updateItem(index, "expiration", e.target.value)}
+                  value={item.expiration.toLocaleDateString("en-CA", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })}
+                  onChange={(e) => updateItem(index, "expiration", new Date(e.target.value))}
                 />
                 <input
                   type="number"
@@ -137,6 +149,15 @@ export default function InventoryPage() {
                   value={item.food_type}
                   onChange={(e) => updateItem(index, "food_type", e.target.value)}
                 />
+                { index !== allItems.length - 1 && (
+                  <button
+                    type="button"
+                    className={`${sharedStyles.input} ${styles.delete}`}
+                    onClick={() => deleteItem(index)}
+                  >
+                    Delete
+                  </button>
+                )}
               </li>
             ))}
           </ul>

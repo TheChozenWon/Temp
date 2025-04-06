@@ -21,6 +21,12 @@
   transform: rotate(5deg);
 }
 
+.delete {
+  color: red;
+  border-color: red;
+  margin-bottom: 1.5em;
+}
+
 @keyframes spinon {
   0% {
     transform: rotate(0deg) scale(0);
