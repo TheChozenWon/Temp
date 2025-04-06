@@ -56,7 +56,7 @@ export default function ExpirationPage() {
   return (
     <div className={sharedStyles.cardPage}>
       <div className={sharedStyles.container}>
-        <h1 className={minilistStyles.title}>Food Expiration Info</h1>
+        <h1 className={minilistStyles.title}>Spoil Alert</h1>
         <input
           type="text"
           placeholder="Search food..."
