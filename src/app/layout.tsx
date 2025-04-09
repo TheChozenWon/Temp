@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 type PageButton = {
   label: string;
   href: string;
-}
+};
 
 const pageButtons: PageButton[] = [
   { label: "Home", href: "/" },
@@ -40,7 +40,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${styles.body}`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${styles.body}`}
+      >
         <header className={styles.header}>
           <div className={styles.logo}>
             <Image
@@ -52,6 +54,10 @@ export default function RootLayout({
             />
           </div>
           <div className={styles.title}>Preservio</div>
+          <div className={styles.authButtons}>
+            <button className={styles.signInButton}>Sign In</button>
+            <button className={styles.signUpButton}>Sign Up</button>
+          </div>
         </header>
         <nav className={styles.navbar}>
           {pageButtons.map((button) => (
@@ -64,9 +70,7 @@ export default function RootLayout({
             </Link>
           ))}
         </nav>
-        <div className={styles.main}>
-          {children}
-        </div>
+        <div className={styles.main}>{children}</div>
       </body>
     </html>
   );
