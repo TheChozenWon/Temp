@@ -1,6 +1,15 @@
 @import url(https://fonts.googleapis.com/css?family=Comic+Sans+MS);
 
+.animationWrapper {
+  overflow: auto;
+  animation: spinon 0.8s linear normal;
+  height: 100%;
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
 .wrapper {
+  min-height: 100%;
   background: linear-gradient(
     to bottom right,
     red,
@@ -11,45 +20,45 @@
     indigo,
     violet
   ) !important;
-  animation: spinon 2s linear normal;
   padding-bottom: 9em;
+}
+
+.delete {
+  color: red;
+  border-color: red;
+  margin-bottom: 1.5em;
+  cursor: pointer;
 }
 
 @keyframes spinon {
   0% {
     transform: rotate(0deg) scale(0);
   }
-  50% {
-    transform: rotate(360deg);
-  }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes hueShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
   100% {
     background-position: 0% 50%;
   }
 }
 
-.foodBox {
+.bordered {
   border: 1px solid black;
-  padding: 5px;
-  margin-bottom: 5px;
+  padding: 10px;
 }
 
-.deleteButton {
-  background-color: red;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.addButton {
+.add {
   background-color: green;
   color: white;
-  border: none;
-  padding: 5px 10px;
+  margin-bottom: 1.5em;
   cursor: pointer;
-  margin-left: 5px;
 }

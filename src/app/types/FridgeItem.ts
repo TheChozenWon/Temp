@@ -1,7 +1,7 @@
 type FridgeItem = {
   food: string;
   expiration: Date;
-  quantity: number | string;
+  quantity: number;
   food_type: string;
   use_date?: Date | null;
   is_expired?: boolean;
@@ -22,7 +22,7 @@ export function fridgeItemMatches(
 }
 
 export function genItemKey(item: FridgeItem): string {
-  return `${item.food}-${item.expiration.toISOString()}-${
+  return `${item.food}-${item.expiration.toLocaleDateString("en-CA")}-${
     item.food_type
-  }-${item.use_date?.toISOString()}`;
+  }`;
 }
