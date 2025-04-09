@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import sharedStyles from "../shared.module.css";
 import styles from "./page.module.css";
 import FridgeItem, { genItemKey } from "../types/FridgeItem";
@@ -25,7 +25,7 @@ export default function InventoryPage() {
   const [mode, setMode] = useState(SuccessMode.NONE);
   const [issue, setIssue] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [allItems, setAllItems] = useState<FridgeItem[]>([]);
+  const [allItems, setAllItems] = useState<FridgeItem[]>([createFakeItem()]);
 
   useEffect(() => {
     fetchItems().then(setAllItems);
@@ -35,18 +35,31 @@ export default function InventoryPage() {
     return !item.food;
   };
 
-  const updateItem = useCallback(
-    (index: number, field: keyof FridgeItem, value: string | number | Date) => {
-      setAllItems((prevItems) => {
-        const newItems = [...prevItems];
-        if (newItems[index][field] !== value) {
-          newItems[index] = { ...newItems[index], [field]: value };
-        }
-        return newItems;
-      });
-    },
-    []
-  );
+  const updateItem = (
+    index: number,
+    field: keyof FridgeItem,
+    value: string | number | Date
+  ) => {
+    setAllItems((prevItems) => {
+      const newItems = [...prevItems];
+      newItems[index] = { ...newItems[index], [field]: value };
+
+      if (itemIsEmpty(newItems[index]) && index !== newItems.length - 1) {
+        newItems.splice(index, 1);
+      }
+
+      if (index === newItems.length - 1 && !itemIsEmpty(newItems[index])) {
+        newItems.push({
+          food: "",
+          expiration: new Date(),
+          quantity: 0,
+          food_type: "",
+        });
+      }
+
+      return newItems;
+    });
+  };
 
   const deleteItem = (index: number) => {
     setAllItems((prevItems) => {
@@ -109,106 +122,66 @@ export default function InventoryPage() {
         <div className={`${sharedStyles.container} ${styles.container}`}>
           <form onSubmit={handleSubmit}>
             <h1>Inventory</h1>
-            {allItems.length === 0 ? (
-              <button
-                type="button"
-                className={`${sharedStyles.input} ${styles.add}`}
-                onClick={() =>
-                  setAllItems([
-                    {
-                      food: "",
-                      expiration: new Date(),
-                      quantity: 0,
-                      food_type: "",
-                    },
-                  ])
-                }
-              >
-                Add Item
-              </button>
-            ) : (
-              <ul>
-                {allItems.map((item, index) => (
-                  <li key={genItemKey(item)}>
-                    <div className={styles.bordered}>
-                      <h2>
-                        {item.food ||
-                          (index === allItems.length - 1
-                            ? "New Item"
-                            : "Unknown Food Item")}
-                      </h2>
-                      <input
-                        type="text"
-                        className={sharedStyles.input}
-                        placeholder="Food"
-                        value={item.food}
-                        onChange={(e) =>
-                          updateItem(index, "food", e.target.value)
-                        }
-                      />
-                      <input
-                        type="date"
-                        className={sharedStyles.input}
-                        placeholder="Expiration Date"
-                        value={item.expiration.toISOString().split("T")[0]} // Convert Date to YYYY-MM-DD
-                        onChange={(e) =>
-                          updateItem(
-                            index,
-                            "expiration",
-                            new Date(e.target.value) // Convert YYYY-MM-DD back to Date
-                          )
-                        }
-                      />
-                      <input
-                        type="number"
-                        className={sharedStyles.input}
-                        placeholder="Quantity"
-                        value={item.quantity}
-                        onChange={(e) =>
-                          updateItem(index, "quantity", Number(e.target.value))
-                        }
-                        min={0}
-                      />
-                      <input
-                        type="text"
-                        className={sharedStyles.input}
-                        placeholder="Type"
-                        value={item.food_type}
-                        onChange={(e) =>
-                          updateItem(index, "food_type", e.target.value)
-                        }
-                      />
-                    </div>
+            <ul>
+              {allItems.map((item, index) => (
+                <li key={genItemKey(item)}>
+                  <h2>
+                    {item.food ||
+                      (index === allItems.length - 1
+                        ? "New Item"
+                        : "Unknown Food Item")}
+                  </h2>
+                  <input
+                    type="text"
+                    className={sharedStyles.input}
+                    placeholder="Food"
+                    value={item.food}
+                    onChange={(e) => updateItem(index, "food", e.target.value)}
+                  />
+                  <input
+                    type="date"
+                    className={sharedStyles.input}
+                    placeholder="Expiration Date"
+                    value={item.expiration.toLocaleDateString("en-CA", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                    })}
+                    onChange={(e) =>
+                      updateItem(index, "expiration", new Date(e.target.value))
+                    }
+                  />
+                  <input
+                    type="number"
+                    className={sharedStyles.input}
+                    placeholder="Quantity"
+                    value={item.quantity}
+                    onChange={(e) =>
+                      updateItem(index, "quantity", e.target.value)
+                    }
+                    min={0}
+                  />
+                  <input
+                    type="text"
+                    className={sharedStyles.input}
+                    placeholder="Type"
+                    value={item.food_type}
+                    onChange={(e) =>
+                      updateItem(index, "food_type", e.target.value)
+                    }
+                  />
+                  {index !== allItems.length - 1 && (
                     <button
                       type="button"
-                      className={`${sharedStyles.input} ${styles.add}`}
-                      onClick={() =>
-                        setAllItems((prevItems) => [
-                          ...prevItems,
-                          {
-                            food: "",
-                            expiration: new Date(),
-                            quantity: 0,
-                            food_type: "",
-                          },
-                        ])
-                      }
+                      className={`${sharedStyles.input} ${styles.delete}`}
+                      onClick={() => deleteItem(index)}
                     >
-                      Add
+                      Delete
                     </button>
-                    {index !== allItems.length - 1 && (
-                      <button
-                        type="button"
-                        className={`${sharedStyles.input} ${styles.delete}`}
-                        onClick={() => deleteItem(index)}
-                      >
-                        Delete
-                      </button>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
+                  )}
+                </li>
+              ))}
+            </ul>
             <input
               type="submit"
               disabled={
@@ -224,6 +197,7 @@ export default function InventoryPage() {
               <p className={sharedStyles.success}>{success}</p>
             )}
           </form>
+          <p className={styles.memetext}>Web design is my passion!</p>
         </div>
       </div>
     </div>

@@ -1,5 +1,16 @@
 @import url(https://fonts.googleapis.com/css?family=Comic+Sans+MS);
 
+.memetext {
+  position: fixed;
+  bottom: -3em;
+  right: -3em;
+  font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", sans-serif;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: yellow;
+  transform: rotate(-10deg);
+}
+
 .animationWrapper {
   overflow: auto;
   animation: spinon 0.8s linear normal;
@@ -23,11 +34,14 @@
   padding-bottom: 9em;
 }
 
+.container {
+  transform: rotate(5deg);
+}
+
 .delete {
   color: red;
   border-color: red;
   margin-bottom: 1.5em;
-  cursor: pointer;
 }
 
 @keyframes spinon {
@@ -49,16 +63,4 @@
   100% {
     background-position: 0% 50%;
   }
-}
-
-.bordered {
-  border: 1px solid black;
-  padding: 10px;
-}
-
-.add {
-  background-color: green;
-  color: white;
-  margin-bottom: 1.5em;
-  cursor: pointer;
 }
